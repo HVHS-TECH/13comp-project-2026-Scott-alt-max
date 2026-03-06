@@ -1,0 +1,28 @@
+.reg-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    
+    /* background-color: black; */
+}
+.reg-box {
+    height: 500px;
+
+    border: 2px solid black;
+    border-radius: 32px;
+
+    background-color: aqua;
+}
+.box-body {
+    padding: 32px;
+}
+.box-foot {
+    width: 100%;
+    background-color: blueviolet;
+    display: flex;
+}
+.box-button {
+    width: 50%;
+}
