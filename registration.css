@@ -25,20 +25,25 @@ p {
     overflow: hidden;
 }
 .box-body {
-    padding: 32px;
     text-align: center;
+    padding: 0px;
 }
 .box-body h2 {
+    margin: 0;
+    padding: 0.5em;
+
     font-size: 64px;
 }
-.box-body p {
+.box-info {
     width: 0;
     min-width: 100%;
 
     display: block;
     font-size: 32px;
-    background-color: aliceblue;
     overflow-wrap: break-word;
+}
+.box-info p {
+    padding: 16px;
 }
 .box-foot {
     width: 100%;
@@ -47,20 +52,23 @@ p {
     background-color: blueviolet;
 }
 .reg-link {
-    width: 50%;
-}
-.box-button {
+    flex: 1;
+    
     margin: 0;
     border-top: 1px solid black;
     padding: 16px;
 
     display: flex;
     justify-content: center;
-
+    align-items: center;
+    
     text-align: center;
     transition: 0.2s;
 }
-.box-button:hover{
+.reg-link:not(:last-child) {
+    border-right: 1px solid black;
+}
+.reg-link:hover{
     cursor: pointer;
     background-color: grey;
     text-decoration: underline;
@@ -70,7 +78,4 @@ p {
 }
 .green {
     background-color: green;
-}
-.left {
-    border-right: 1px solid black;
 }
