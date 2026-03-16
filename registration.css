@@ -17,12 +17,15 @@ p {
     border: 2px solid black;
     border-radius: 32px;
 
-    display: flex;
+    display: none;
     flex-direction: column;
     position: relative;
 
     background-color: aqua;
     overflow: hidden;
+}
+.default-box {
+    display: flex;
 }
 .box-body {
     text-align: center;

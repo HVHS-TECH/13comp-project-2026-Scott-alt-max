@@ -9,20 +9,20 @@
         <link rel="stylesheet" href="registration.css">
     </head>
     <body class="reg-body">
-        <div class="reg-box" id="not-logged-in-box">
+        <div class="reg-box default-box" id="not-logged-in-box">
             <div class="box-body">
                 <h2>Not Logged In</h2>
                 <div class="box-info">
-                <p>You must be logged in to continue</p>
+                    <p>You must be logged in to continue</p>
                 </div>
             </div>
             <div class="box-foot">
-                <a class="reg-link red">
+                <div class="reg-link red" onclick="signUp()">
                     <p>Sign-up</p>
-                </a>
-                <a class="reg-link green">
+                </div>
+                <div class="reg-link green">
                     <p>Login</p>
-                </a>
+                </div>
             </div>
         </div>
         <div class="reg-box" id="not-a-user-box">
@@ -33,9 +33,9 @@
                 </div>
             </div>
             <div class="box-foot">
-                <a class="reg-link red">
+                <div class="reg-link red">
                     <p>Sign-up</p>
-                </a>
+                </div>
             </div>
         </div>
         <div class="reg-box" id="already-a-user-box">
@@ -46,12 +46,12 @@
                 </div>
             </div>
             <div class="box-foot">
-                <a class="reg-link red">
+                <div class="reg-link red">
                     <p>Sign-up with new account</p>
-                </a>
-                <a class="reg-link green">
+                </div>
+                <div class="reg-link green">
                     <p>Login with old account</p>
-                </a>
+                </div>
             </div>
         </div>
         <div class="reg-box" id="sign-up-box">
@@ -62,11 +62,12 @@
                 </div>
             </div>
             <div class="box-foot">
-                <a class="reg-link red">
+                <div class="reg-link red">
                     <p>Sign-up</p>
-                </a>
+                </div>
             </div>
         </div>
     </body>
+    <script type="module" src="firebaseFunctions.mjs"></script>
     <script src="registration.js"></script>
 </html>

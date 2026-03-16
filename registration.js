@@ -1,10 +1,9 @@
 
 
-
-//document.getElementById("not-logged-in-box").style.display = ("none");
-//document.getElementById("not-a-user-box").style.display = ("none");
-//document.getElementById("already-a-user-box").style.display = ("none");
-//document.getElementById("sign-up-box").style.display = ("none");
+function signUp() {
+    console.log("sing up");
+    runGoogleAuth();
+}
 
 function changeToRegBox(regBox) {
     var allRegBoxes = document.getElementsByClassName("reg-box");
@@ -14,4 +13,4 @@ function changeToRegBox(regBox) {
     document.getElementById(regBox).style.display = "flex";
 }
 
-changeToRegBox("not-logged-in-box");
+// changeToRegBox("not-logged-in-box");
