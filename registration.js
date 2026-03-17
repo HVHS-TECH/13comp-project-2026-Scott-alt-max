@@ -1,8 +1,14 @@
-
+var userID;
 
 function signUp() {
-    console.log("sing up");
-    runGoogleAuth();
+    console.log("sign up");
+    //googleAuth = runGoogleAuth();
+    //userID = googleAuth.user.uid;
+
+    var allreadySignedUp = checkSignedUp();
+    if (allreadySignedUp) {
+
+    }
 }
 
 function changeToRegBox(regBox) {
@@ -13,4 +19,16 @@ function changeToRegBox(regBox) {
     document.getElementById(regBox).style.display = "flex";
 }
 
+function checkSignedUp() {
+    console.log("working");
+
+    const FILEPATH = "userPublicDetails/";
+    readFirebase(FILEPATH).then((userList) => {
+        console.log(userList);
+        
+        for (user in userList, () => {
+            
+        });
+    });
+}
 // changeToRegBox("not-logged-in-box");

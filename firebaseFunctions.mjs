@@ -3,9 +3,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase
 import { getDatabase, ref, set, get, update, query, orderByChild, limitToFirst, limitToLast, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-var fb_gameDB;
+var database;
 var googleAuth;
-var uid;
+var userID;
 
 // Functions to initialise and authenticate
 function initialiseFirebase() {
@@ -16,13 +16,13 @@ function initialiseFirebase() {
         storageBucket: "scott-barlow-y13-compsci.firebasestorage.app",
         messagingSenderId: "14148227974",
         appId: "1:14148227974:web:73630eff747dc5d0e21207",
-        measurementId: "G-2DY0WENQT4"
-        // databaseURL: "https://scotty13compsci-default-rtdb.asia-southeast1.firebasedatabase.app"
+        measurementId: "G-2DY0WENQT4",
+        databaseURL: "https://scott-barlow-y13-compsci-default-rtdb.asia-southeast1.firebasedatabase.app"
     };
     
     const FB_GAMEAPP = initializeApp(FB_GAMECONFIG);
-    fb_gameDB = getDatabase(FB_GAMEAPP);
-    console.info(fb_gameDB); //DIAG
+    database = getDatabase(FB_GAMEAPP);
+    console.info(database); //DIAG
 }
 function runGoogleAuth() {
     const AUTH = getAuth();
@@ -39,13 +39,40 @@ function runGoogleAuth() {
         console.log("User Email: " + googleAuth._tokenResponse.email); //DIAG
         console.log("User Local ID: " + googleAuth.user.uid); //DIAG
 
-        uid = googleAuth.user.uid;
+        userID = googleAuth.user.uid;
+
+        return googleAuth;
     }).catch((error) => {
         console.log("Authentication unsuccessful"); //DIAG
         console.log(error); //DIAG
+    });
+}
+// Functions to read stuff from the database
+function readFirebase(FILEPATH) {
+    const REF = ref(database, FILEPATH);
+
+    return get(REF).then((snapshot) => {
+        console.log("get is working"); //DIAG
+
+        var data = snapshot.val();
+
+        if (data != null) {
+            console.log("Successfully read database information:");
+            console.log(data);
+            return data;
+        } else {
+            console.log("Attempting to read a value that doesn't exist");
+            console.log(data);
+            return null
+        }
+    }).catch((error) => {
+        console.log("Error with reading the database");
+        console.log(error);
+        return null
     });
 }
 
 initialiseFirebase();
 window.initialiseFirebase = initialiseFirebase;
 window.runGoogleAuth = runGoogleAuth;
+window.readFirebase = readFirebase;
