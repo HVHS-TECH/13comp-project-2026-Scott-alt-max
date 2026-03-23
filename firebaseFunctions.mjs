@@ -32,8 +32,9 @@ function runGoogleAuth() {
     PROVIDER.setCustomParameters({
         prompt: 'select_account'
     });
-    signInWithPopup(AUTH, PROVIDER).then((result) => {
+    return signInWithPopup(AUTH, PROVIDER).then((result) => {
         googleAuth = result;
+        console.log(googleAuth); //DIAG
 
         console.log("Authentication successful"); //DIAG
         console.log("User Email: " + googleAuth._tokenResponse.email); //DIAG
