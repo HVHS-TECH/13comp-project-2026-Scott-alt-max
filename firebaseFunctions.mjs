@@ -73,6 +73,19 @@ function readFirebase(FILEPATH) {
     });
 }
 
+// Functions to write to the database
+function writeToFirebase(FILEPATH, DATA) {
+    const REF = ref(fb_gameDB, FILEPATH);
+
+    set(REF, DATA).then(() => {
+        console.log("Written the following information to the database:");
+        console.log(DATA);
+    }).catch((error) => {
+        console.log("Error with writing to the database");
+        console.log(error);
+    });
+}
+
 initialiseFirebase();
 window.initialiseFirebase = initialiseFirebase;
 window.runGoogleAuth = runGoogleAuth;

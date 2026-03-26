@@ -56,7 +56,51 @@ async function login() {
         changeToRegBox("not-a-user-box");
     }
 }
-function submit() {}
+
+function submit() {
+    console.log("submit called");
+    const NAME = checkValid(document.getElementById('name'));
+    const AGE = document.getElementById('age').value;
+    const ADDRESS = document.getElementById('address').value;
+    const EMAIL = document.getElementById('email').value;
+    const SKILL = document.getElementById('skill').value;
+    const GAMES_PLAYED = document.getElementById('games-played').value;
+    
+    const FORM_PRIVATE_DETAILS = {
+        age: AGE,
+        address: ADDRESS,
+        email: EMAIL,
+    };
+    const FORM_PUBLIC_DETAILS = {
+        name: NAME,
+        skill: SKILL,
+        winRate: 0.00,
+        gamesPlayed: GAMES_PLAYED
+    };
+    
+    const PRIVATE_FILEPATH = userID + "/userPrivateDetails";
+    const PUBLIC_FILEPATH = userID + "/userPublicDetails";
+    //writeToFirebase(PRIVATE_FILEPATH, FORM_PRIVATE_DETAILS);
+    //writeToFirebase(PUBLIC_FILEPATH, FORM_PUBLIC_DETAILS);
+
+    //goToHomePage();
+}
+function checkValid(inputObject) {
+    try {
+        var value = inputObject.value;
+
+        if (value == null) {
+            inputObject.style.border = "2px solid red";
+            throw "Value cannot be null";
+        } else { 
+            return value 
+        }
+    }
+    catch(error) {
+        console.log(error);
+        return null;
+    }
+}
 function keepOldAccount() {}
 function makeNewAccount() {}
 
