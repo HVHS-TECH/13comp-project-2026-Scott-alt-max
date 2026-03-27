@@ -64,6 +64,7 @@ form .feild {
     width: 50%;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 form .feild .label-wrapper {
     width: 100%;
@@ -83,7 +84,7 @@ form .feild .input-wrapper input {
     width: 90%;
     height: 1.3em;
     margin: 0px;
-    padding: 0 0 0 5px;
+    padding: 0 0 0 4px;
     border: 0px;
     background-color: rgb(1, 235, 235);
     border-bottom: 2px solid black;
@@ -92,6 +93,20 @@ form .feild .input-wrapper input {
 form .feild .input-wrapper input:focus {
     background-color: rgb(19, 185, 185);
     outline: none;
+}
+#error-message {
+    display: none;
+    width: 100%;
+    justify-content: center;
+    padding: 0 0 16px 0;
+}
+#error-message p {
+    background-color: black;
+    color: red;
+    width: 70%;
+    border-radius: 4px;
+    padding: 4px;
+    font-size: 16px;
 }
 
 /* The css for the bottom of the box, the buttons */

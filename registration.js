@@ -57,15 +57,23 @@ async function login() {
     }
 }
 
-function submit() {
+async function submit() {
     console.log("submit called");
+
+    // Called in reverse order from the html so that the checkvalid function
+    // puts the user on the first feild that they haven't filled out
+    const GAMES_PLAYED = checkValid(document.getElementById('games-played'));
+    const SKILL = checkValid(document.getElementById('skill'));
+    const EMAIL = checkValid(document.getElementById('email'));
+    const ADDRESS = checkValid(document.getElementById('address'));
+    const AGE = checkValid(document.getElementById('age'));
     const NAME = checkValid(document.getElementById('name'));
-    const AGE = document.getElementById('age').value;
-    const ADDRESS = document.getElementById('address').value;
-    const EMAIL = document.getElementById('email').value;
-    const SKILL = document.getElementById('skill').value;
-    const GAMES_PLAYED = document.getElementById('games-played').value;
     
+    if (NAME == null || AGE == null || ADDRESS == null || EMAIL == null || SKILL == null || GAMES_PLAYED == null) {
+        console.log("Not all fields are valid");
+        return;
+    }
+
     const FORM_PRIVATE_DETAILS = {
         age: AGE,
         address: ADDRESS,
@@ -80,31 +88,31 @@ function submit() {
     
     const PRIVATE_FILEPATH = userID + "/userPrivateDetails";
     const PUBLIC_FILEPATH = userID + "/userPublicDetails";
-    //writeToFirebase(PRIVATE_FILEPATH, FORM_PRIVATE_DETAILS);
-    //writeToFirebase(PUBLIC_FILEPATH, FORM_PUBLIC_DETAILS);
+    await writeToFirebase(PRIVATE_FILEPATH, FORM_PRIVATE_DETAILS);
+    await writeToFirebase(PUBLIC_FILEPATH, FORM_PUBLIC_DETAILS);
 
-    //goToHomePage();
+    goToHomePage();
 }
 function checkValid(inputObject) {
-    try {
-        var value = inputObject.value;
+    var value = inputObject.value;
 
-        if (value == null) {
-            inputObject.style.border = "2px solid red";
-            throw "Value cannot be null";
-        } else { 
-            return value 
-        }
-    }
-    catch(error) {
-        console.log(error);
+    if (value == null || value.trim() === "") {
+        inputObject.style.border = "2px solid red";
+        inputObject.focus();
+        document.getElementById("error-message").style.display = "flex";
+
+        console.log("Value cannot be null");
         return null;
+    } else { 
+        inputObject.classList.remove("invalid");
+        return value;
     }
 }
 function keepOldAccount() {}
 function makeNewAccount() {}
 
 function goToHomePage() { window.location.href = "index.html"; }
+
 function changeToRegBox(regBox) {
     var allRegBoxes = document.getElementsByClassName("reg-box");
     for (var i = 0; i < allRegBoxes.length; i++) {

@@ -21,7 +21,7 @@
                 <div class="reg-link red" onclick="signUp()">
                     <p>Sign-up</p>
                 </div>
-                <div class="reg-link green">
+                <div class="reg-link green" onclick="login()">
                     <p>Login</p>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="box-foot">
-                <div class="reg-link red">
+                <div class="reg-link red" onclick="signUp()">
                     <p>Sign-up</p>
                 </div>
             </div>
@@ -60,31 +60,31 @@
                 <h2>Sign Up</h2>
                 <div class="box-info">
                     <form id="sign-up-form">
-                        <div class="feild">
+                        <div class="feild invalid">
                             <div class="label-wrapper"><label>Name:</label></div>
                             <div class="input-wrapper">
-                                <input type="text" id="name" required>
+                                <input type="text" id="name">
                             </div>
                         </div>
 
                         <div class="feild">
                             <div class="label-wrapper"><label>Age:</label></div>
                             <div class="input-wrapper">
-                                <input type="number" id="age" required>
+                                <input type="number" id="age">
                             </div>
                         </div>
 
                         <div class="feild">
                             <div class="label-wrapper"><label>Address:</label></div>
                             <div class="input-wrapper">
-                                <input type="text" id="address" required>
+                                <input type="text" id="address">
                             </div>
                         </div>
 
                         <div class="feild">
                             <div class="label-wrapper"><label>Email:</label></div>
                             <div class="input-wrapper">
-                                <input type="text" id="email" required>
+                                <input type="text" id="email">
                             </div>
                         </div>
 
@@ -102,6 +102,11 @@
                             </div>
                         </div>
                     </form>
+                    <div id="error-message">
+                        <p>
+                            You must fill out all feilds to continue.
+                        </p>
+                    </div>
                 </div>
             </div>
             <div class="box-foot">
