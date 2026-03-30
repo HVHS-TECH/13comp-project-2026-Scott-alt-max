@@ -3,7 +3,7 @@
 
 
 var userID;
-
+var googleAuth;
 
 
 /**
@@ -11,14 +11,19 @@ var userID;
  * If they are, take them to the already a user box,
  * if they aren't take them to the sign up page
  */
+async function runGoogleAuth() {
+    console.log("runGoogleAuth");
+
+    if (userID == null) {
+        googleAuth = await authFirebase();
+        userID = googleAuth.user.uid;
+        googleAuth = googleAuth;
+    }
+}
 async function signUp() {
     console.log("sign up");
 
-    if (userID == null) {
-        googleAuth = await runGoogleAuth();
-        userID = googleAuth.user.uid;
-    }
-
+    await runGoogleAuth();
     var alreadySignedUp = await checkIsUser();
     if (alreadySignedUp) {
         changeToRegBox("already-a-user-box");
@@ -58,7 +63,7 @@ async function login() {
 }
 
 async function submit() {
-    console.log("submit called");
+    console.log("submit");
 
     // Called in reverse order from the html so that the checkvalid function
     // puts the user on the first feild that they haven't filled out
@@ -96,20 +101,23 @@ async function submit() {
 function checkValid(inputObject) {
     var value = inputObject.value;
 
-    if (value == null || value.trim() === "") {
-        inputObject.style.border = "2px solid red";
+    if (!value) {
+        inputObject.classList.add("invalid");
         inputObject.focus();
-        document.getElementById("error-message").style.display = "flex";
 
-        console.log("Value cannot be null");
+        document.getElementById("error-message").style.display = "flex";
         return null;
     } else { 
         inputObject.classList.remove("invalid");
-        return value;
+        return value.trim();
     }
 }
-function keepOldAccount() {}
-function makeNewAccount() {}
+function keepOldAccount() {
+    
+}
+function makeNewAccount() {
+    changeToRegBox("sign-up-box");
+}
 
 function goToHomePage() { window.location.href = "index.html"; }
 

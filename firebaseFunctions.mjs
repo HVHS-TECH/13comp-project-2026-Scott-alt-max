@@ -24,7 +24,7 @@ function initialiseFirebase() {
     database = getDatabase(FB_GAMEAPP);
     console.info(database); //DIAG
 }
-function runGoogleAuth() {
+function authFirebase() {
     const AUTH = getAuth();
     const PROVIDER = new GoogleAuthProvider();
 
@@ -48,6 +48,31 @@ function runGoogleAuth() {
         console.log(error); //DIAG
     });
 }
+function signInWithPreviousAccount() {
+    console.log("test");
+    document.body.style.display = "none";
+
+    const AUTH = getAuth();
+
+    onAuthStateChanged(AUTH, (user) => {
+        if (false) { //TODO if (user) {
+            console.log("User doesn't need to sign in");
+
+            document.body.style.display = "default";
+            window.location.href = "index.html";
+        } else {
+            console.log("User needs to sign in");
+
+            document.body.style.display = "default";
+            window.location.href = "registration.html";
+        }
+    }, (error) => {
+        document.body.style.display = "default";
+        console.log("Authorisation state detection error");
+        console.log(error);
+    });
+}
+
 // Functions to read stuff from the database
 function readFirebase(FILEPATH) {
     const REF = ref(database, FILEPATH);
@@ -75,7 +100,7 @@ function readFirebase(FILEPATH) {
 
 // Functions to write to the database
 function writeToFirebase(FILEPATH, DATA) {
-    const REF = ref(fb_gameDB, FILEPATH);
+    const REF = ref(database, FILEPATH);
 
     set(REF, DATA).then(() => {
         console.log("Written the following information to the database:");
@@ -87,6 +112,8 @@ function writeToFirebase(FILEPATH, DATA) {
 }
 
 initialiseFirebase();
+signInWithPreviousAccount();
 window.initialiseFirebase = initialiseFirebase;
-window.runGoogleAuth = runGoogleAuth;
+window.authFirebase = authFirebase;
 window.readFirebase = readFirebase;
+window.writeToFirebase = writeToFirebase;
