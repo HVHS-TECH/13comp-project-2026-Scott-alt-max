@@ -50,7 +50,7 @@ function authFirebase() {
 }
 function signInWithPreviousAccount() {
     console.log("test");
-    document.body.style.display = "none";
+    hideBody();
 
     const AUTH = getAuth();
 
@@ -58,19 +58,34 @@ function signInWithPreviousAccount() {
         if (false) { //TODO if (user) {
             console.log("User doesn't need to sign in");
 
-            document.body.style.display = "default";
+            showBody();
             window.location.href = "index.html";
         } else {
-            console.log("User needs to sign in");
-
-            document.body.style.display = "default";
-            window.location.href = "registration.html";
+            var currentPage = window.location.href;
+            if (currentPage.includes("registration.html")) {
+                console.log("User needs to sign in");
+                console.log(currentPage);
+                showBody();
+            } else {
+                // User is already on the registration page
+                showBody();
+                window.location.href = "registration.html";
+            }
         }
     }, (error) => {
-        document.body.style.display = "default";
+        showBody();
         console.log("Authorisation state detection error");
         console.log(error);
     });
+
+    function hideBody() {
+        document.body.style.display = "none";
+        document.documentElement.style.cursor = 'progress';
+    }
+    function showBody() {
+        document.body.style.display = "";
+        document.documentElement.style.cursor = 'default';
+    }
 }
 
 // Functions to read stuff from the database
