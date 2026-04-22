@@ -18,6 +18,10 @@ async function runGoogleAuth() {
         googleAuth = await authFirebase();
         userID = googleAuth.user.uid;
         googleAuth = googleAuth;
+        return googleAuth;
+    } else {
+        console.log("Called runGoogleAuth but user is already signed in");
+        return null;
     }
 }
 async function signUp() {
@@ -97,23 +101,24 @@ async function submit() {
     await writeToFirebase(PUBLIC_FILEPATH, FORM_PUBLIC_DETAILS);
 
     goToHomePage();
-}
-function checkValid(inputObject) {
-    var value = inputObject.value;
+    
+    function checkValid(inputObject) {
+        var value = inputObject.value;
 
-    if (!value) {
-        inputObject.classList.add("invalid");
-        inputObject.focus();
+        if (!value) {
+            inputObject.classList.add("invalid");
+            inputObject.focus();
 
-        document.getElementById("error-message").style.display = "flex";
-        return null;
-    } else { 
-        inputObject.classList.remove("invalid");
-        return value.trim();
+            document.getElementById("error-message").style.display = "flex";
+            return null;
+        } else { 
+            inputObject.classList.remove("invalid");
+            return value.trim();
+        }
     }
 }
 function keepOldAccount() {
-    
+    goToHomePage();
 }
 function makeNewAccount() {
     changeToRegBox("sign-up-box");
@@ -130,9 +135,9 @@ function changeToRegBox(regBox) {
 
     /**
      * Regboxes: 
-     * not-logged-in-box
-     * not-a-user-box
-     * already-a-user-box
-     * sign-up-box
+     * not-logged-in-box        - shown by default
+     * not-a-user-box           - shown by not-logged-in-box
+     * already-a-user-box       - shown by not-logged-in-box
+     * sign-up-box              - shown by not-logged-in-box, not-a-user-box, and already-a-user-box
      */
 }

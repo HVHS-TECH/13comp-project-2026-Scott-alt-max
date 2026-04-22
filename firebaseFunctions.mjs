@@ -49,26 +49,25 @@ function authFirebase() {
     });
 }
 function signInWithPreviousAccount() {
-    console.log("test");
     hideBody();
 
     const AUTH = getAuth();
+    var currentPage = window.location.href;
 
     onAuthStateChanged(AUTH, (user) => {
-        if (false) { //TODO if (user) {
-            console.log("User doesn't need to sign in");
+        if (user) {
+            console.log("User doesn't need to sign in"); //DIAG
 
             showBody();
-            window.location.href = "index.html";
-        } else {
-            var currentPage = window.location.href;
+            
             if (currentPage.includes("registration.html")) {
-                console.log("User needs to sign in");
-                console.log(currentPage);
-                showBody();
-            } else {
-                // User is already on the registration page
-                showBody();
+                window.location.href = "index.html";
+            }
+        } else {
+            // Go to registration page and show it
+            showBody();
+            
+            if (!(currentPage.includes("registration.html"))) {
                 window.location.href = "registration.html";
             }
         }
