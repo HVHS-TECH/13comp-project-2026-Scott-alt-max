@@ -56,13 +56,13 @@ function signInWithPreviousAccount() {
 
     onAuthStateChanged(AUTH, (user) => {
         if (user) {
-            console.log("User doesn't need to sign in"); //DIAG
+            // console.log("User doesn't need to sign in"); //DIAG
 
-            showBody();
+            // showBody();
             
-            if (currentPage.includes("registration.html")) {
-                window.location.href = "index.html";
-            }
+            // if (currentPage.includes("registration.html")) {
+            //     window.location.href = "index.html";
+            // }
         } else {
             // Go to registration page and show it
             showBody();
@@ -85,6 +85,15 @@ function signInWithPreviousAccount() {
         document.body.style.display = "";
         document.documentElement.style.cursor = 'default';
     }
+}
+function logoutFirebase() {
+    const AUTH = getAuth();
+    signOut(AUTH).then(() => {
+        console.log("Sign out successful");
+    }).catch((error) => {
+        console.log("Error with signing out");
+        console.log(error);
+    });
 }
 
 // Functions to read stuff from the database
@@ -127,7 +136,7 @@ function writeToFirebase(FILEPATH, DATA) {
 
 initialiseFirebase();
 signInWithPreviousAccount();
-window.initialiseFirebase = initialiseFirebase;
 window.authFirebase = authFirebase;
+window.logoutFirebase = logoutFirebase;
 window.readFirebase = readFirebase;
 window.writeToFirebase = writeToFirebase;
