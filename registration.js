@@ -1,11 +1,3 @@
-
-
-
-
-var userID;
-var googleAuth;
-
-
 /**
  * Sign up button logic, will check if the user is already signed up
  * If they are, take them to the already a user box,
@@ -14,35 +6,47 @@ var googleAuth;
 async function runGoogleAuth() {
 	console.log("runGoogleAuth");
 
-	if (userID == null) {
-		googleAuth = await authFirebase();
-		userID = googleAuth.user.uid;
-		googleAuth = googleAuth;
-		return googleAuth;
-	} else {
-		console.log("Called runGoogleAuth but user is already signed in");
-		return null;
-	}
+	var googleAuth = await authFirebase();
+	return googleAuth.user.uid;
 }
 async function signUp() {
 	console.log("sign up");
 
-	await runGoogleAuth();
-	var alreadySignedUp = await checkIsUser();
-	if (alreadySignedUp) {
+	// If the user isn't already signed in, run googleAuth
+	var userID = getUserIDFirebase();
+	if (userID == undefined) {
+		console.log("User needs to sign in");
+		userID = await runGoogleAuth();
+	}
+
+	var isUser = await checkIsUser(userID);
+	if (isUser) {
 		changeToRegBox("already-a-user-box");
 	} else {
 		changeToRegBox("sign-up-box");
 	}
 }
-async function checkIsUser() {
+async function login() {
+	console.log("login");
+	
+	var userID = await runGoogleAuth();
+
+	var isUser = await checkIsUser(userID);
+	if (isUser) {
+		goToHomePage();
+	} else {
+		changeToRegBox("not-a-user-box");
+	}
+}
+// Checks if the user is in the database, returns true or false
+async function checkIsUser(userID) {
 	console.log("check is user");
 
 	const FILEPATH = "userPublicDetails/";
 	const USERLIST = await readFirebase(FILEPATH);
 
 	console.log(USERLIST);
-		
+	
 	for (var user in USERLIST) {
 		if (user == userID) {
 			console.log("User is already signed up");
@@ -50,20 +54,6 @@ async function checkIsUser() {
 		}
 	}
 	return false;
-}
-
-async function login() {
-	console.log("login");
-	
-	googleAuth = await runGoogleAuth();
-	userID = googleAuth.user.uid;
-
-	var alreadySignedUp = await checkIsUser();
-	if (alreadySignedUp) {
-		goToHomePage();
-	} else {
-		changeToRegBox("not-a-user-box");
-	}
 }
 
 async function submit() {
@@ -95,8 +85,9 @@ async function submit() {
 		gamesPlayed: GAMES_PLAYED
 	};
 	
-	const PRIVATE_FILEPATH = "userPrivateDetails" + userID;
-	const PUBLIC_FILEPATH = "userPublicDetails" + userID;
+	var userID = await getUserIDFirebase();
+	const PRIVATE_FILEPATH = "userPrivateDetails/" + userID;
+	const PUBLIC_FILEPATH = "userPublicDetails/" + userID;
 	await writeToFirebase(PRIVATE_FILEPATH, FORM_PRIVATE_DETAILS);
 	await writeToFirebase(PUBLIC_FILEPATH, FORM_PUBLIC_DETAILS);
 

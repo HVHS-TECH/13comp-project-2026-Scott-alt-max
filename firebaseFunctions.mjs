@@ -48,6 +48,14 @@ function authFirebase() {
         console.log(error); //DIAG
     });
 }
+function getUserIDFirebase() {
+    var auth = getAuth();
+    if (auth.currentUser == null) {
+        return null;
+    } else {
+        return auth.currentUser.uid;
+    }
+}
 function signInWithPreviousAccount() {
     hideBody();
 
@@ -58,7 +66,7 @@ function signInWithPreviousAccount() {
         if (user) {
             // console.log("User doesn't need to sign in"); //DIAG
 
-            // showBody();
+            showBody();
             
             // if (currentPage.includes("registration.html")) {
             //     window.location.href = "index.html";
@@ -137,6 +145,7 @@ function writeToFirebase(FILEPATH, DATA) {
 initialiseFirebase();
 signInWithPreviousAccount();
 window.authFirebase = authFirebase;
+window.getUserIDFirebase = getUserIDFirebase;
 window.logoutFirebase = logoutFirebase;
 window.readFirebase = readFirebase;
 window.writeToFirebase = writeToFirebase;
