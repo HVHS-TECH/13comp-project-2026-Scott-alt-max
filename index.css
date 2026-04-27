@@ -1,6 +1,19 @@
-.nav {
+p {
+    margin: 0;
+}
+* {
+    box-sizing: border-box;
+}
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+nav {
     height: 50px;
     display: flex;
+    position: absolute;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
     padding: 0.5em 1em;
@@ -22,16 +35,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 95%;
-    width: 40px;
+    height: 35px;
     padding: 0.5em 1em;
     background-color: #555;
     border-radius: 4px;
     cursor: pointer;
 }
 .profile-button {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     float: right;
 }
@@ -40,4 +52,37 @@
     height: 100%;
     border-radius: 50%;
     background-color: gray;
+}
+
+
+/* Main cards and game links */
+.main {
+    background-color: blueviolet;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+.game-list {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+}
+.game-card {
+    height: 300px;
+    min-width: 25vw;
+
+    border: 2px solid black;
+    border-radius: 32px;
+
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    background-color: aqua;
+    overflow: hidden;
 }

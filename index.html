@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="index.css">
     </head>
     <body>
-        <div class="nav">
+        <nav>
             <h1 class="logo">Insane Games</h1>
             <div class="nav-right">
                 <div class="logout-cont">
@@ -21,7 +21,20 @@
                     <div class="profile-picture"><div>
                 </div>
             </div>
-        </div>
+        </nav>
+        <section class="main">
+            <h2>Welcome, <span id="username">username</span>!</h2>
+            <div class="game-list">
+                <div class="game-card" onclick="window.location.href='games/mazeGame.html'">
+                    <h3>Game 1</h3>
+                    <p>A fun and exciting game to play!</p>
+                </div>
+                <div class="game-card" onclick="window.location.href='game2.html'">
+                    <h3>Game 2</h3>
+                    <p>Another thrilling game to enjoy!</p>
+                </div>
+            </div>
+        </section>
     </body>
     <script type="module" src="firebaseFunctions.mjs"></script>
     <script src="index.js"></script>

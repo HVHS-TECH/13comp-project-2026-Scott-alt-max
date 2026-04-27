@@ -88,8 +88,8 @@ async function submit() {
 	var userID = await getUserIDFirebase();
 	const PRIVATE_FILEPATH = "userPrivateDetails/" + userID;
 	const PUBLIC_FILEPATH = "userPublicDetails/" + userID;
-	await writeToFirebase(PRIVATE_FILEPATH, FORM_PRIVATE_DETAILS);
-	await writeToFirebase(PUBLIC_FILEPATH, FORM_PUBLIC_DETAILS);
+	await writeFirebase(PRIVATE_FILEPATH, FORM_PRIVATE_DETAILS);
+	await writeFirebase(PUBLIC_FILEPATH, FORM_PUBLIC_DETAILS);
 
 	goToHomePage();
 	

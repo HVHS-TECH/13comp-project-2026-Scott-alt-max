@@ -9,6 +9,7 @@ var userID;
 
 // Functions to initialise and authenticate
 function initialiseFirebase() {
+    console.log("initalising Firebase...") //DIAG
     const FB_GAMECONFIG = {
         apiKey: "AIzaSyDyKVbIE0T5C62PV7mFtLm4gAuewL0zPVQ",
         authDomain: "scott-barlow-y13-compsci.firebaseapp.com",
@@ -49,6 +50,7 @@ function authFirebase() {
     });
 }
 function getUserIDFirebase() {
+    console.log("getting user ID"); //DIAG
     var auth = getAuth();
     if (auth.currentUser == null) {
         return null;
@@ -58,7 +60,6 @@ function getUserIDFirebase() {
 }
 function signInWithPreviousAccount() {
     hideBody();
-
     const AUTH = getAuth();
     var currentPage = window.location.href;
 
@@ -130,7 +131,7 @@ function readFirebase(FILEPATH) {
 }
 
 // Functions to write to the database
-function writeToFirebase(FILEPATH, DATA) {
+function writeFirebase(FILEPATH, DATA) {
     const REF = ref(database, FILEPATH);
 
     set(REF, DATA).then(() => {
@@ -148,4 +149,4 @@ window.authFirebase = authFirebase;
 window.getUserIDFirebase = getUserIDFirebase;
 window.logoutFirebase = logoutFirebase;
 window.readFirebase = readFirebase;
-window.writeToFirebase = writeToFirebase;
+window.writeFirebase = writeFirebase;
