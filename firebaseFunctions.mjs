@@ -110,8 +110,6 @@ function readFirebase(FILEPATH) {
     const REF = ref(database, FILEPATH);
 
     return get(REF).then((snapshot) => {
-        console.log("get is working"); //DIAG
-
         var data = snapshot.val();
 
         if (data != null) {

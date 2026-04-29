@@ -73,23 +73,24 @@ async function submit() {
 		return;
 	}
 
-	const FORM_PRIVATE_DETAILS = {
+	const USER_PRIVATE_DETAILS = {
 		age: AGE,
 		address: ADDRESS,
 		email: EMAIL,
 	};
-	const FORM_PUBLIC_DETAILS = {
+	const USER_PUBLIC_DETAILS = {
 		name: NAME,
 		skill: SKILL,
 		winRate: 0.00,
-		gamesPlayed: GAMES_PLAYED
+		gamesPlayed: GAMES_PLAYED,
+		mazeGameHighScore: 0
 	};
 	
 	var userID = await getUserIDFirebase();
 	const PRIVATE_FILEPATH = "userPrivateDetails/" + userID;
 	const PUBLIC_FILEPATH = "userPublicDetails/" + userID;
-	await writeFirebase(PRIVATE_FILEPATH, FORM_PRIVATE_DETAILS);
-	await writeFirebase(PUBLIC_FILEPATH, FORM_PUBLIC_DETAILS);
+	await writeFirebase(PRIVATE_FILEPATH, USER_PRIVATE_DETAILS);
+	await writeFirebase(PUBLIC_FILEPATH, USER_PUBLIC_DETAILS);
 
 	goToHomePage();
 	

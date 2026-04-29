@@ -1,14 +1,3 @@
-
-
-
-
-console.log("Test if working"); //DIAG
-
-
-
-
-
-
 // Consts and Variables
 const INFORMATIONPANELWIDTH = 150;
 const GAMEWIDTH = Math.min(window.innerWidth * 0.7, window.innerHeight * 0.7);
@@ -33,15 +22,18 @@ var CurrentFrame = 0;
 
 // Firebase functions and variables to get the highscores working
 var HighScore;
-var uid = getUserIDFirebase();
-console.log("The user ID is:" + uid); //DIAG
+var haveUpdatedHighScore = false;
 
-function updateHighScore(_highScore) {
-    var filePath = "userPublicInformation/" + uid + "/mazeGameHighScore";
+async function updateHighScore(_highScore) {
+    haveUpdatedHighScore = true;
+
+    const userID = await getUserIDFirebase();
+
+    var filePath = "userPublicDetails/" + userID + "/mazeGameHighScore";
     writeFirebase(filePath, _highScore);
 }
-function readHighScore() {
-    var filePath = "userPublicInformation/" + uid + "/mazeGameHighScore";
+async function readHighScore(userID) {
+    var filePath = "userPublicDetails/" + userID + "/mazeGameHighScore";
     return readFirebase(filePath);
 }
 
@@ -354,14 +346,16 @@ function StartGame(_MazeSquaresWide, _MazeSquaresTall, _GameSeconds) {
     // Make the sprites
     CreateSprites(_MazeSquaresWide, _MazeSquaresTall);
 
+    // Reset haveUpdatedHighScore so user can update their highscore again
+    haveUpdatedHighScore = false;
+
+    // Get the user ID
+    userID = getUserIDFirebase();
+
     // Get the highscore now because it is async
-    if (uid != null) {
-        readHighScore().then((DBHighScore) => {
-            console.log("The high score is:");
-            HighScore = DBHighScore;
-            console.log(HighScore);
-        });
-    }
+    readHighScore(userID).then((result) => {
+        HighScore = result;
+    });
 }
 function EndGame(gameState) {
     // Remove the sprites
@@ -407,7 +401,7 @@ function MakeButtons() {
 function setup() {
     console.log("Setup started");
 
-    let cnw = new Canvas(GAMEWIDTH + INFORMATIONPANELWIDTH, GAMEHEIGHT);
+    createCanvas(GAMEWIDTH + INFORMATIONPANELWIDTH, GAMEHEIGHT);
     MakeButtons();
 
     console.log("Setup finished");
@@ -475,14 +469,11 @@ function draw() {
             textAlign(CENTER, CENTER);
             text("You Won", (GAMEWIDTH + INFORMATIONPANELWIDTH) / 2, GAMEHEIGHT / 2);
             text("You had " + SecondsLeft + " seconds left", (GAMEWIDTH + INFORMATIONPANELWIDTH) / 2, GAMEHEIGHT / 2 + TEXTSIZE + 5);
+            text("Your high score is " + HighScore, (GAMEWIDTH + INFORMATIONPANELWIDTH) / 2, GAMEHEIGHT / 2 + TEXTSIZE * 2 + 10);
+            
             // Send highscore to firebase
-            if (uid != null) {
-                if (SecondsLeft > HighScore) {
-                    updateHighScore(SecondsLeft);
-                }
-                text("Your high score is " + HighScore, (GAMEWIDTH + INFORMATIONPANELWIDTH) / 2, GAMEHEIGHT / 2 + TEXTSIZE * 2 + 10);
-            } else {
-                text("Sign-in to view your highscores", (GAMEWIDTH + INFORMATIONPANELWIDTH) / 2, GAMEHEIGHT / 2 + TEXTSIZE * 2 + 10);
+            if (SecondsLeft > HighScore && !haveUpdatedHighScore) {
+                updateHighScore(SecondsLeft);
             }
             break;
         case 3:
@@ -491,15 +482,11 @@ function draw() {
             textAlign(CENTER, CENTER);
             text("You Lost", (GAMEWIDTH + INFORMATIONPANELWIDTH) / 2, GAMEHEIGHT / 2);
             text("You had " + SecondsLeft + " seconds left", (GAMEWIDTH + INFORMATIONPANELWIDTH) / 2, GAMEHEIGHT / 2 + TEXTSIZE + 5);
+            text("Your high score is " + HighScore, (GAMEWIDTH + INFORMATIONPANELWIDTH) / 2, GAMEHEIGHT / 2 + TEXTSIZE * 2 + 10);
 
             // Send highscore to firebase
-            if (uid != null) {
-                if (SecondsLeft > HighScore) {
-                    updateHighScore(SecondsLeft);
-                }
-                text("Your high score is " + HighScore, (GAMEWIDTH + INFORMATIONPANELWIDTH) / 2, GAMEHEIGHT / 2 + TEXTSIZE * 2 + 10);
-            } else {
-                text("Sign-in to view your highscores", (GAMEWIDTH + INFORMATIONPANELWIDTH) / 2, GAMEHEIGHT / 2 + TEXTSIZE * 2 + 10);
+            if (SecondsLeft > HighScore && !haveUpdatedHighScore) {
+                updateHighScore(SecondsLeft);
             }
             break;
         default:
