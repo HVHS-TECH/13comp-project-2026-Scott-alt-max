@@ -401,7 +401,8 @@ function MakeButtons() {
 function setup() {
     console.log("Setup started");
 
-    createCanvas(GAMEWIDTH + INFORMATIONPANELWIDTH, GAMEHEIGHT);
+    const canvas = createCanvas(GAMEWIDTH + INFORMATIONPANELWIDTH, GAMEHEIGHT);
+    canvas.parent("maze-game-container");
     MakeButtons();
 
     console.log("Setup finished");

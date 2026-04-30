@@ -18,11 +18,31 @@
 
         <script src="https://p5play.org/v3/planck.min.js"></script>
         <script src="https://p5play.org/v3/p5play.js"></script>
+
+        <!-- Link to the CSS files for styling -->
+        <link rel="stylesheet" href="../css/nav.css">
+        <link rel="stylesheet" href="../css/mazeGame.css">
     </head>
 
     <body>
-        <p>hrife</p>
-        <script type="module" src="../firebaseFunctions.mjs"></script>
-        <script src="../games/mazeGame.js"></script>
+        <nav>
+            <h1 class="logo"><a href="index.html">Insane Games</a></h1>
+            <div class="nav-right">
+                <div class="logout-cont">
+                    <div onclick="logoutFirebase()" class="logout-button">
+                        Log out
+                    </div>
+                </div>
+                <div class="profile-button">
+                    <div class="profile-picture"><div>
+                </div>
+            </div>
+        </nav>
+        <main>
+            <div id="maze-game-container"></div>
+        </main>
     </body>
+
+    <script type="module" src="../js/firebaseFunctions.mjs"></script>
+    <script src="../js/mazeGame.js"></script>
 </html>

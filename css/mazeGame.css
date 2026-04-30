@@ -1,0 +1,29 @@
+p {
+    margin: 0;
+}
+* {
+    box-sizing: border-box;
+}
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+main {
+    background-color: blueviolet;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+}
+#maze-game-container {
+    width: 100%;
+    background-color: #fff;
+    overflow: hidden;
+}
+#maze-game-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

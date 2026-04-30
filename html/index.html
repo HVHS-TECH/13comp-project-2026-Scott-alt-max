@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Insane Games</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <nav>
+        <h1 class="logo">Insane Games</h1>
+        <div class="nav-right">
+            <div class="logout-cont">
+                <div onclick="logoutFirebase()" class="logout-button">
+                    Log out
+                </div>
+            </div>
+            <div class="profile-button">
+                <div class="profile-picture">
+                    <div>
+                    </div>
+                </div>
+    </nav>
+    <main>
+        <h2>Welcome, <span id="username">username</span>!</h2>
+        <div class="game-list">
+            <div class="game-card" onclick="window.location.href='mazeGame.html'">
+                <h3>Game 1</h3>
+                <p>A fun and exciting game to play!</p>
+            </div>
+            <div class="game-card" onclick="window.location.href='game2.html'">
+                <h3>Game 2</h3>
+                <p>Another thrilling game to enjoy!</p>
+            </div>
+        </div>
+        <h2>Leaderboard</h2>
+        <table class="leaderboard">
+            <tr>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>Score</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Alice</td>
+                <td>1000</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Bob</td>
+                <td>900</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Charlie</td>
+                <td>800</td>
+            </tr>
+        </table>
+    </main>
+</body>
+<script type="module" src="../js/firebaseFunctions.mjs"></script>
+<script src="../js/index.js"></script>
+
+</html>
