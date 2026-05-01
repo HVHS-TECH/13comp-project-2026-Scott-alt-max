@@ -127,6 +127,22 @@ function readFirebase(FILEPATH) {
         return null
     });
 }
+function readSortedFirebase(FILEPATH, KEY, LIMIT) {
+    const REF = query(ref(database, FILEPATH), orderByChild(KEY), limitToLast(LIMIT));
+
+    return get(REF).then((snapshot) => {
+        if (snapshot == null) throw ("Attempting to read a value that doesn't exist");
+
+        var data = snapshot.val();
+        console.log("Successfully read sorted database information:");
+        console.log(data);
+        return data;
+    }).catch((error) => {
+        console.log("Error with reading the sorted database");
+        console.log(error);
+        return null;
+    });
+}
 
 // Functions to write to the database
 function writeFirebase(FILEPATH, DATA) {
@@ -147,4 +163,5 @@ window.authFirebase = authFirebase;
 window.getUserIDFirebase = getUserIDFirebase;
 window.logoutFirebase = logoutFirebase;
 window.readFirebase = readFirebase;
+window.readSortedFirebase = readSortedFirebase;
 window.writeFirebase = writeFirebase;
