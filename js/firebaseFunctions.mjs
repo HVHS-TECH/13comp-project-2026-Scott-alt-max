@@ -135,7 +135,6 @@ function readSortedFirebase(FILEPATH, KEY, LIMIT) {
 
         var data = snapshot.val();
         console.log("Successfully read sorted database information:");
-        console.log(data);
         return data;
     }).catch((error) => {
         console.log("Error with reading the sorted database");
@@ -157,11 +156,11 @@ function writeFirebase(FILEPATH, DATA) {
     });
 }
 
-initialiseFirebase();
-signInWithPreviousAccount();
 window.authFirebase = authFirebase;
 window.getUserIDFirebase = getUserIDFirebase;
 window.logoutFirebase = logoutFirebase;
 window.readFirebase = readFirebase;
 window.readSortedFirebase = readSortedFirebase;
 window.writeFirebase = writeFirebase;
+initialiseFirebase();
+signInWithPreviousAccount();
