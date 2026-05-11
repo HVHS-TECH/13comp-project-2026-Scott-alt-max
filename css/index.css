@@ -85,9 +85,20 @@ th:nth-child(2), td:nth-child(2) {
 
 /* Styling for the edit button */
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 20;
+    margin: 0;
+    padding: 0px;
+    font-size: 20px;
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 20;
+}
+.material-symbols-outlined:hover {
+    color: grey;
+    cursor: pointer;
+}
+.edit-input {
+    width: 100%;
+    font-size: 0.75em;
 }
