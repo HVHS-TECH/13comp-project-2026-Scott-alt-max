@@ -9,15 +9,23 @@ var sortedBy = "mazeGameHighScore";
 // ------------------------------------------------------------------------------
 
 async function sortBy(key, element) {
+    // Show the loading sign while waiting for the database to respond
+    tbody.innerHTML = `<tr id="loading"><td>Loading. . .</td></tr>`;
+
+    sortedBy = key;
+
     // Read the highscores from firebase
     const FILEPATH = "userPublicDetails";
     const sortedData = Object.entries(await readSortedFirebase(FILEPATH, key, desiredNumberOfRows));
+
+    // Reverse to show highest first
+    sortedData.reverse();
 
     // Clear the table then add the sorted data
     tbody.innerHTML = "";
 
     sortedData.forEach(([userID, userInformation]) => {
-        console.log(userInformation, tbody.childElementCount);
+        //console.log(userInformation, tbody.childElementCount);
         prependRow(userID, userInformation, sortedData.length);
     });
 
@@ -29,7 +37,7 @@ async function sortBy(key, element) {
 }
 function prependRow(userID, userInformation, totalRows) {
     const row = document.createElement("tr");
-    var rank = totalRows - tbody.childElementCount;
+    var rank = tbody.childElementCount + 1;
     row.innerHTML = `
         <td>${rank}</td>
         <td>${userInformation.name}</td>
@@ -44,15 +52,6 @@ function prependRow(userID, userInformation, totalRows) {
 // ------------------------------------------------------------------------------
 // Functions for all of the admin editing stuff
 // ------------------------------------------------------------------------------
-
-// TODO
-// IT ISNT SORTING BY THE SORTEDBY VARIABLE IT JUST SORTS MAZE GAME HIGHSCORE NO MATTER WHAT
-// ALSO DONT THINK THAT IT SHOULD BE LIMIT TO LAST, THINK IT SHOULD BE LIMIT TO FIRST, BUT TEST BOTH
-
-// Make is so that when you try to re read the data base it says loading
-// Make it write the information to the database with each users' userID
-// Make it be able to read all of the private information
-// Make it so that this only works for admins
 
 function editRow(row) {
     // Read the current values from the row and store them as HTML string
