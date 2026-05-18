@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Scott’s Psychedelic Games</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="12COMP P5.play">
+        <meta name="keywords" content="12COMP, P5.play">
+        <meta name="author" content="Scott">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Link to the CSS files for styling -->
+        <link rel="stylesheet" href="../css/nav.css">
+        <link rel="stylesheet" href="../css/guessTheNumber.css">
+    </head>
+
+    <body>
+        <nav>
+            <h1 class="logo"><a href="index.html">Insane Games</a></h1>
+            <div class="nav-right">
+                <div class="logout-cont">
+                    <div onclick="logoutFirebase()" class="logout-button">
+                        Log out
+                    </div>
+                </div>
+                <div class="profile-button">
+                    <div class="profile-picture"><div>
+                </div>
+            </div>
+        </nav>
+        <main>
+            <div class="create-lobby">
+                <button>
+                    create lobby
+                </button>
+            </div>
+            <div class="lobbies">
+                <button>
+                    Create lobby
+                </button>
+                <h2>Lobby list</h2>
+                <ul>
+                    <li>
+                        <a>Join <span>Jamie</span>'s Game</a>
+                    </li>
+                    <li>
+                        <a>Join <span>Scott</span>'s Game</a>
+                    </li>
+                    <li>
+                        <a>Join <span>Artem</span>'s Game</a>
+                    </li>
+                </ul>
+            </div>
+        </main>
+    </body>
+
+    <script type="module" src="../js/firebaseFunctions.mjs"></script>
+    <script src="../js/guessTheNumber.js"></script>
+</html>
