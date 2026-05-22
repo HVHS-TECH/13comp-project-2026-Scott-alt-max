@@ -36,6 +36,28 @@ async function createLobby() {
     // Change user to the waiting page
     // TODO
 }
+async function searchForLobby() {
+    const lobbyList = await readFirebase("lobbies");
+    
+    Object.entries(lobbyList).forEach(([lobbyHostID, lobbyInfo]) => {
+        if (lobbyInfo.playerInformation.guest == null) {
+            isHost = false;
+            hostID = lobbyHostID;
+            joinLobby(lobbyInfo);
+        }
+    });
+}
+async function joinLobby(lobbyInfo) {
+    // Write the guestName to firebase
+    const guestNameFilePath = `userPublicDetails/${await getUserIDFirebase()}/name`;
+    const guestName = await readFirebase(guestNameFilePath);
+
+    const playerInfoFilepath = `lobbies/${hostID}/playerInformation/guest`;
+    writeFirebase(playerInfoFilepath, {"name": guestName});
+    
+    // Change user to the waiting page
+    // TODO
+}
 
 /**
  * Write the guess to firebase
