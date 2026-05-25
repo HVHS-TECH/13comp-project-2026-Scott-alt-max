@@ -149,6 +149,9 @@ function readSortedFirebase(FILEPATH, KEY, LIMIT) {
         return null;
     });
 }
+function addListenerFirebase(FILEPATH, FUNCTION) {
+    // TODO
+}
 
 // Functions to write to the database
 function writeFirebase(FILEPATH, DATA) {

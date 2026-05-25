@@ -8,3 +8,52 @@ html, body {
     margin: 0;
     height: 100%;
 }
+
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* CSS for the guess the number boxes */
+.gtn-box {
+    min-height: 300px;
+    min-width: 400px;
+
+    border: 2px solid black;
+    border-radius: 32px;
+
+    display: none;
+    flex-direction: column;
+    position: relative;
+
+    background-color: aqua;
+    overflow: hidden;
+}
+.default-box {
+    display: flex;
+}
+.box-body {
+    text-align: center;
+    padding: 0px;
+}
+.box-body h2 {
+    margin: 0;
+    padding: 16px;
+
+    font-size: 64px;
+}
+.box-info {
+    width: 0;
+    min-width: 100%;
+
+    display: block;
+    font-size: 32px;
+    overflow-wrap: break-word;
+}
+.box-info p {
+    padding: 16px;
+    padding-top: 0px;
+}

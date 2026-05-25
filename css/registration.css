@@ -54,6 +54,43 @@ p {
     padding: 16px;
     padding-top: 0px;
 }
+
+/* The css for the bottom of the reg-boxes, the buttons */
+.box-foot {
+    width: 100%;
+    margin-top: auto;
+    display: flex;
+    background-color: blueviolet;
+}
+.reg-link {
+    flex: 1;
+    
+    margin: 0;
+    border-top: 1px solid black;
+    padding: 16px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    text-align: center;
+    transition: 0.2s;
+}
+.reg-link:not(:last-child) {
+    border-right: 1px solid black;
+}
+.reg-link:hover{
+    cursor: pointer;
+    background-color: grey;
+    text-decoration: underline;
+}
+.red {
+    background-color: red;
+}
+.green {
+    background-color: green;
+}
+
 /* Css for the form */
 form {
     display: flex;
@@ -110,40 +147,4 @@ form .feild .input-wrapper input:focus {
     border-radius: 4px;
     padding: 4px;
     font-size: 16px;
-}
-
-/* The css for the bottom of the box, the buttons */
-.box-foot {
-    width: 100%;
-    margin-top: auto;
-    display: flex;
-    background-color: blueviolet;
-}
-.reg-link {
-    flex: 1;
-    
-    margin: 0;
-    border-top: 1px solid black;
-    padding: 16px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    text-align: center;
-    transition: 0.2s;
-}
-.reg-link:not(:last-child) {
-    border-right: 1px solid black;
-}
-.reg-link:hover{
-    cursor: pointer;
-    background-color: grey;
-    text-decoration: underline;
-}
-.red {
-    background-color: red;
-}
-.green {
-    background-color: green;
 }

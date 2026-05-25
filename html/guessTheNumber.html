@@ -28,13 +28,37 @@
             </div>
         </nav>
         <main>
-            <div>
-                <button onclick="createLobby()">
+            <div class="gtn-box default-box" id="landing-page-box">
+                <button onclick="onCreateLobbyPressed()">
                     create lobby
                 </button>
-                <button onclick="searchForLobby()">
+                <button onclick="onJoinLobbyPressed()">
                     join random lobby
                 </button>
+            </div>
+            <div class="gtn-box" id="waiting-for-guest-box">
+                <h2>Go get a friend</h2>
+            </div>
+            <div class="gtn-box" id="game-box">
+                <div class="your-turn-box">
+                    <p class="opponent-guess">Your opponent guessed: <span>54</span></p>
+                    <input class="guess-button" type="number" min="0" max="100">
+                    <button>Guess</button>
+                </div>
+                <div class="not-your-turn-box">
+                    <h2>Waiting for your opponent to guess</h2>
+                </div>
+            </div>
+            <div class="gtn-box" id="game-over-box">
+                <h2>Game Over</h2>
+                <p>Would you like to play again?</p>
+                <p class="want-rematch">Your friend wants to play again!</p>
+                <p class="no-rematch">Your friend left you :/</p>
+                <button>Rematch</button><button>Leave</button>
+            </div>
+            <div class="gtn-box" id="waiting-for-rematch-box">
+                <h2>Waiting for your friend to accept rematch</h2>
+                <button>Cancel rematch</button>
             </div>
         </main>
     </body>

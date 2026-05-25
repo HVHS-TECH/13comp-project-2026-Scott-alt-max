@@ -34,7 +34,9 @@ async function createLobby() {
     await writeFirebase(lobbyFilePath, lobbyInformation);
 
     // Change user to the waiting page
-    // TODO
+    changeToGTNBox("waiting-for-guest-box");
+
+    // Set up listener that will redirect to the game-gox
 }
 async function searchForLobby() {
     const lobbyList = await readFirebase("lobbies");
@@ -56,7 +58,7 @@ async function joinLobby(lobbyInfo) {
     writeFirebase(playerInfoFilepath, {"name": guestName});
     
     // Change user to the waiting page
-    // TODO
+    changeToGTNBox("game-box");
 }
 
 /**
@@ -78,4 +80,22 @@ async function guess(number) {
     }
     
     writeFirebase(filePath, number);
+}
+
+function changeToGTNBox(GTNBox) {
+	var allGTNBoxes = document.getElementsByClassName("gtn-box");
+    console.log(allGTNBoxes);
+	for (var i = 0; i < allGTNBoxes.length; i++) {
+		allGTNBoxes[i].style.display = ("none");
+	}
+	document.getElementById(GTNBox).style.display = "flex";
+
+	/**
+	 * GTNboxes:
+     * landing-page-box
+     * waiting-for-guest-box
+     * game-box
+     * game-over-box
+     * waiting-for-rematch-box
+     */
 }
