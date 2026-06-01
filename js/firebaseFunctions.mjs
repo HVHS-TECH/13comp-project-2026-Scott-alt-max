@@ -113,8 +113,8 @@ function readFirebase(FILEPATH) {
         var data = snapshot.val();
 
         if (data != null) {
-            console.log("Successfully read database information:");
-            console.log(data);
+            //console.log("Successfully read database information:");
+            //console.log(data);
             return data;
         } else {
             console.log("Attempting to read a value that doesn't exist");
@@ -169,8 +169,8 @@ function writeFirebase(FILEPATH, DATA) {
     const REF = ref(database, FILEPATH);
 
     set(REF, DATA).then(() => {
-        console.log("Written the following information to the database:");
-        console.log(DATA);
+        //console.log("Written the following information to the database:");
+        //console.log(DATA);
     }).catch((error) => {
         console.log("Error with writing to the database");
         console.log(error);

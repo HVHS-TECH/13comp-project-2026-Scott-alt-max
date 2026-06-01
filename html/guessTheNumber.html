@@ -41,12 +41,13 @@
                 <button onclick="deleteLobby()">Cancel matchmaking</button>
             </div>
             <div class="gtn-box game-box" id="your-turn-box">
-                <p class="opponent-guess">Your opponent guessed: <span>54</span></p>
+                <p id="opponent-guess">Need To be updated</p>
                 <input class="guess-button" type="number" min="0" max="100" id="guess-input">
                 <button onclick="guess()">Guess</button>
             </div>
-            <div class="gtn-box game-box" id="not-your-turn-box">
-                <h2>Waiting for your opponent to guess</h2>
+            <div class="gtn-box game-box default-box" id="not-your-turn-box">
+                <h1 id="how-far-off">Need to be updated</h1>
+                <p>Waiting for your opponent to guess . . .</p>
             </div>
             <div class="gtn-box" id="game-over-box">
                 <h2>Game Over</h2>
