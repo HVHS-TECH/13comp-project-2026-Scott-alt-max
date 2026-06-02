@@ -107,35 +107,39 @@ async function displayGameBox() {
     const whoseTurn = await readFirebase(whoseTurnFilepath);
 
     if ((whoseTurn == "host" && isHost) || (whoseTurn == "guest" && !isHost)) {
-
         // Display the opponents lastest guess unless they haven't had their first guess yet
+
         const opponentHostOrGuest = (isHost) ? "guest" : "host";
         const opponentsGuessFilepath = "lobbies/" + hostID + "/playerInformation/" + opponentHostOrGuest + "/latestGuess";
         const opponentsGuess = await readFirebase(opponentsGuessFilepath);
-        
-        console.log(opponentsGuessFilepath);
+
         document.getElementById("opponent-guess").innerHTML = "Your opponent guessed: " + opponentsGuess;
-        // if (opponentsGuess == null) {
-        //     document.getElementById("opponent-guess").innerHTML = "";
-        // } else {
-        //     document.getElementById("opponent-guess").innerHTML = "Your opponent guessed: " + opponentsGuess;
-        // }
+        if (opponentsGuess == null) {
+            document.getElementById("opponent-guess").innerHTML = "";
+        } else {
+            document.getElementById("opponent-guess").innerHTML = "Your opponent guessed: " + opponentsGuess;
+        }
 
         changeToGTNBox("your-turn-box");
     } else {
-        
         // Read the user's guess and tell them if they are too high or too low
+
         const userHostOrGuest = (isHost) ? "host" : "guest";
-        const usersGuessFilepath = "lobbies/" + hostID + "/userInformation/" + userHostOrGuest + "/latestGuess";
+        const usersGuessFilepath = "lobbies/" + hostID + "/playerInformation/" + userHostOrGuest + "/latestGuess";
         const usersGuess = await readFirebase(usersGuessFilepath);
-        console.log("usersGuess:" + usersGuess)
-        // TODOTODO
 
         const targetFilepath = "lobbies/" + hostID + "/gameInformation/number";
         const target = await readFirebase(targetFilepath);
 
-        console.log("user guess filepath: " + usersGuessFilepath);
-        document.getElementById("how-far-off").innerHTML = `target${target} guess${usersGuess}`;
+        if (usersGuess == null) {
+            document.getElementById("how-far-off").innerHTML = "";
+        } else if (usersGuess > target) {
+            document.getElementById("how-far-off").innerHTML = usersGuess + " is too high";
+        } else if (usersGuess < target) {
+            document.getElementById("how-far-off").innerHTML = usersGuess + " is too low";
+        } else {
+            document.getElementById("how-far-off").innerHTML = usersGuess + " is correct! Good job. This should not be showing an you should get redirected";
+        }
         changeToGTNBox("not-your-turn-box");
     }
 
