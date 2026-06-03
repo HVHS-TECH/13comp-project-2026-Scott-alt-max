@@ -1,6 +1,10 @@
 var isHost;
 var hostID;
 
+/*******************************************
+ * Functions that handle all lobby logic
+ * Creating, joining, deleting
+ *******************************************/
 async function createLobby() {
     isHost = true;
 
@@ -56,17 +60,18 @@ async function searchForLobby() {
             joinLobby(lobbyInfo);
         }
     });
-}
-async function joinLobby(lobbyInfo) {
-    // Write the guestName to firebase
-    const guestNameFilePath = `userPublicDetails/${await getUserIDFirebase()}/name`;
-    const guestName = await readFirebase(guestNameFilePath);
-
-    const playerInfoFilepath = `lobbies/${hostID}/playerInformation/guest`;
-    writeFirebase(playerInfoFilepath, {"name": guestName});
     
-    // Change user to the game page
-    displayGameBox();
+    async function joinLobby(lobbyInfo) {
+        // Write the guestName to firebase
+        const guestNameFilePath = `userPublicDetails/${await getUserIDFirebase()}/name`;
+        const guestName = await readFirebase(guestNameFilePath);
+
+        const playerInfoFilepath = `lobbies/${hostID}/playerInformation/guest`;
+        writeFirebase(playerInfoFilepath, {"name": guestName});
+        
+        // Change user to the game page
+        displayGameBox();
+    }
 }
 async function deleteLobby() {
     if (hostID == null) {
@@ -81,12 +86,10 @@ async function deleteLobby() {
     await changeToGTNBox("landing-page-box");
 }
 
-/**
- * Write the guess to firebase
- * Either writes to hostGuess or guestGuess
- * Will increase the current round if it is the guestGuess
- * Will also change whoseTurn in firebase, which will trigger the box to change
- */
+/*******************************************
+ * Functions that handle all game logic
+ * Guessing, swapping the GTN box if its not your turn
+ *******************************************/
 async function guess() {
     const guess = document.getElementById("guess-input").value;
 
@@ -101,56 +104,70 @@ async function guess() {
     const newWhoseTurn = (whoseTurn == "host" ? "guest" : "host");
     writeFirebase(whoseTurnFilePath, newWhoseTurn);
 }
-
-async function displayGameBox() {
+async function displayGameBox(playerInformation) {
     const whoseTurnFilepath = "lobbies/" + hostID + "/gameInformation/whoseTurn";
     const whoseTurn = await readFirebase(whoseTurnFilepath);
 
-    if ((whoseTurn == "host" && isHost) || (whoseTurn == "guest" && !isHost)) {
-        // Display the opponents lastest guess unless they haven't had their first guess yet
+    if (playerInformation == undefined) {
+        // This is the first time the user has landed on the game page
+        // Therefore, they cannot be shown the other users guess, or if they are too high or too low,
+        // Because they have not guessed yet
+        // Therefore, do not set up the box, just show the defaults
 
-        const opponentHostOrGuest = (isHost) ? "guest" : "host";
-        const opponentsGuessFilepath = "lobbies/" + hostID + "/playerInformation/" + opponentHostOrGuest + "/latestGuess";
-        const opponentsGuess = await readFirebase(opponentsGuessFilepath);
-
-        document.getElementById("opponent-guess").innerHTML = "Your opponent guessed: " + opponentsGuess;
-        if (opponentsGuess == null) {
-            document.getElementById("opponent-guess").innerHTML = "";
+        console.log("first time huh. Can tell by the look of ya");
+        if ((whoseTurn == "host" && isHost) || (whoseTurn == "guest" && !isHost)) {
+            changeToGTNBox("your-turn-box");
         } else {
-            document.getElementById("opponent-guess").innerHTML = "Your opponent guessed: " + opponentsGuess;
+            changeToGTNBox("not-your-turn-box");
         }
-
-        changeToGTNBox("your-turn-box");
     } else {
-        // Read the user's guess and tell them if they are too high or too low
-
-        const userHostOrGuest = (isHost) ? "host" : "guest";
-        const usersGuessFilepath = "lobbies/" + hostID + "/playerInformation/" + userHostOrGuest + "/latestGuess";
-        const usersGuess = await readFirebase(usersGuessFilepath);
-
         const targetFilepath = "lobbies/" + hostID + "/gameInformation/number";
         const target = await readFirebase(targetFilepath);
 
-        if (usersGuess == null) {
-            document.getElementById("how-far-off").innerHTML = "";
-        } else if (usersGuess > target) {
+        if ((whoseTurn == "host" && isHost) || (whoseTurn == "guest" && !isHost)) {
+            setupNotYourTurnBox(playerInformation, target);
+            changeToGTNBox("your-turn-box");
+        } else {
+            setupNotYourTurnBox(playerInformation, target);
+            changeToGTNBox("not-your-turn-box");
+        }
+    }
+
+    // When the player information changes (the players make a guess), update the gamebox
+    const playerInformationFilePath = "lobbies/" + hostID + "/playerInformation";
+    const unsubscribe = addListenerFirebase(playerInformationFilePath, (data) => {
+        displayGameBox(data);
+        unsubscribe();
+    });
+    function setupNotYourTurnBox(playerInformation, target) {
+        // Read the user's previous guess and tell them if they are too high or too low
+        const usersGuess = (isHost) ? playerInformation.host.latestGuess : playerInformation.guest.latestGuess;
+
+        if (usersGuess > target) {
             document.getElementById("how-far-off").innerHTML = usersGuess + " is too high";
         } else if (usersGuess < target) {
             document.getElementById("how-far-off").innerHTML = usersGuess + " is too low";
         } else {
             document.getElementById("how-far-off").innerHTML = usersGuess + " is correct! Good job. This should not be showing an you should get redirected";
         }
-        changeToGTNBox("not-your-turn-box");
     }
-
-    // When whose turn changes, change the box accordingly
-    const unsubscribe = addListenerFirebase(whoseTurnFilepath, (data) => {
-        if (data != whoseTurn) {
-            displayGameBox();
-            unsubscribe();
+    function setupYourTurnBox(playerInformation, target) {
+        // Display the opponents lastest guess unless they haven't had their first guess yet
+        const opponentsGuess = (isHost) ? playerInformation.guest.latestGuess : playerInformation.host.latestGuess;
+           
+        if (usersGuess > target) {
+            document.getElementById("opponent-guess").innerHTML = "Your opponent guessed: " + opponentsGuess + " (it was too high)";
+        } else if (usersGuess < target) {
+            document.getElementById("opponent-guess").innerHTML = "Your opponent guessed: " + opponentsGuess + " (it was too low)";
+        } else {
+            document.getElementById("opponent-guess").innerHTML = "Your opponent got it right: " + opponentsGuess;
         }
-    });
+    }
 }
+
+/*******************************************
+ * Simple function to swap the GTN box
+ *******************************************/
 function changeToGTNBox(GTNBox) {
 	var allGTNBoxes = document.getElementsByClassName("gtn-box");
 	for (var i = 0; i < allGTNBoxes.length; i++) {
