@@ -3,7 +3,7 @@ var hostID;
 
 /*******************************************
  * Functions that handle all lobby logic
- * Creating, joining, deleting
+ * Creating, joining, deleting, opponentLeaving
  *******************************************/
 async function createLobby() {
     isHost = true;
@@ -62,14 +62,20 @@ async function createLobby() {
 async function searchForLobby() {
     const lobbyList = await readFirebase("lobbies");
     
+    var haveFoundLobby = false;
     Object.entries(lobbyList).forEach(([lobbyHostID, lobbyInfo]) => {
         if (lobbyInfo.playerInformation.guest.name == "null") {
             isHost = false;
+            haveFoundLobby = true;
             console.log("guest");
             hostID = lobbyHostID;
             joinLobby(lobbyInfo);
         }
     });
+    if (!haveFoundLobby) {
+        // TODO
+        // show no lobbies available
+    }
     
     async function joinLobby(lobbyInfo) {
         // Write the guestName to firebase
@@ -83,6 +89,14 @@ async function searchForLobby() {
         startGame();
     }
 }
+function setUpOnDisconnect() {
+    // Make on disconnect that, when the player disconnects, it deletes the lobby
+
+    // Make a listener that checks for the lobby being deleted and switches to the opponent left screen
+}
+function leaveLobby() {
+
+}
 async function deleteLobby() {
     if (hostID == null) {
         console.log("hostID is null, so cannot delete lobby");
@@ -90,10 +104,7 @@ async function deleteLobby() {
     }
     
     const lobbyFilePath = "lobbies/" + hostID;
-    writeFirebase(lobbyFilePath, null);
-
-    // Change user to the landing page
-    await changeToGTNBox("landing-page-box");
+    await writeFirebase(lobbyFilePath, null);
 }
 
 /*******************************************
@@ -192,11 +203,17 @@ async function displayGameBox(playerInformation) {
         }
     }
 }
+
+/*******************************************
+ * Functions that handle all game over logic
+ * Updating the gamebox, requesting a rematch, and resetting game state
+ *******************************************/
 function endGame(whoWon, number, unsub) {
     unsub();
     changeToGTNBox("game-over-box");
 
-    // Start resetting the game so that when both players want a rematch
+    // Start resetting the game so that when both players want a rematch all variables have been reset
+    // Does create a race condition between resetting and both players wanting a rematch
     resetGame();
 
     // Fix the html
