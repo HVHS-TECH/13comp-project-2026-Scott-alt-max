@@ -121,7 +121,7 @@ async function startGame() {
         var playerInformation = await readFirebase(playerInformationFilepath);
         playerInformation.guest.wantsRematch = "null";
         playerInformation.host.wantsRematch = "null";
-        await writeFirebase("playerInformationFilepath", playerInformation);
+        await writeFirebase(playerInformationFilepath, playerInformation);
     }
 
     // This is the first time the user has landed on the game page
@@ -143,9 +143,9 @@ async function startGame() {
         const lobby = await readFirebase(lobbyFilePath);
         if (lobby.playerInformation.guest.latestGuess != "null" || lobby.playerInformation.host.latestGuess != "null") {
             if (lobby.playerInformation.guest.latestGuess == lobby.gameInformation.number) {
-                endGame("guest", lobby.gameInformation.number);
+                endGame("guest", lobby.gameInformation.number, unsubscribe);
             } else if (lobby.playerInformation.host.latestGuess == lobby.gameInformation.number) {
-                endGame("host", lobby.gameInformation.number);
+                endGame("host", lobby.gameInformation.number, unsubscribe);
             } else {
                 displayGameBox(lobby.playerInformation);
             }
@@ -192,10 +192,15 @@ async function displayGameBox(playerInformation) {
         }
     }
 }
-function endGame(whoWon, number) {
+function endGame(whoWon, number, unsub) {
+    unsub();
     changeToGTNBox("game-over-box");
 
-    if (whoWon == "host" && isHost || whoWon == "guest" && !isHost) { 
+    // Start resetting the game so that when both players want a rematch
+    resetGame();
+
+    // Fix the html
+    if (whoWon == "host" && isHost || whoWon == "guest" && !isHost) {
         document.getElementById("winner").innerHTML = "You Won!!!";
     } else {
         document.getElementById("winner").innerHTML = "Shame. You lost :(";
@@ -212,6 +217,27 @@ function endGame(whoWon, number) {
         }
     });
 }
+function resetGame() {
+    if (isHost) {
+        const numToGuess = Math.floor(Math.random() * 101);
+        const firstGuesser = (Math.random() < 0.5 ? "host" : "guest");
+
+        const newGameInformation = {
+            "number": numToGuess,
+            "whoseTurn": firstGuesser
+        }
+
+        // Do not need to await the writes because they do not affect each other
+        const newGameInformationFilepath = "lobbies/" + hostID + "/gameInformation";
+        writeFirebase(newGameInformationFilepath, newGameInformation);
+
+        const guestLatestGuessFilepath = "lobbies/" + hostID + "/playerInformation/guest/latestGuess";
+        writeFirebase(guestLatestGuessFilepath, "null");
+
+        const hostLatestGuessFilepath = "lobbies/" + hostID + "/playerInformation/host/latestGuess";
+        writeFirebase(hostLatestGuessFilepath, "null");
+    }
+}
 async function requestRematch() {
     const userWantsRematchFilepath = (isHost) ? "lobbies/" + hostID + "/playerInformation/host/wantsRematch" : "lobbies/" + hostID + "/playerInformation/guest/wantsRematch";
     await writeFirebase(userWantsRematchFilepath, true);
@@ -222,39 +248,17 @@ async function requestRematch() {
     // If the opponent already wants a rematch, then rematch,
     // If they don't, add a listener to check for if they do
     if (opponentWantsRematch == true) {
-        restartGame();
+        startGame();
     } else {
         changeToGTNBox("waiting-for-rematch-box");
 
         const unsubscribe = addListenerFirebase(opponentWantsRematchFilepath, (data) => {
             if (data == true) {
-                restartGame();
+                startGame();
                 unsubscribe();
             }
         });
     }
-}
-async function restartGame() {
-    // TODOTDO move all of this into the endGame so that it will be done by the time the users want to rematch
-    if (isHost) {
-        const numToGuess = Math.floor(Math.random() * 101);
-        const firstGuesser = (Math.random() < 0.5 ? "host" : "guest");
-
-        const newGameInformation = {
-            "gameInformation": {
-                "number": numToGuess,
-                "whoseTurn": firstGuesser
-            }
-        }
-
-        const playerInformationFilepath = "lobbies/" + hostID + "/playerInformation";
-        var playerInformation = await readFirebase(playerInformationFilepath);
-        playerInformation.guest.latestGuess = "null";
-        playerInformation.host.latestGuess = "null";
-        await writeFirebase("playerInformationFilepath", playerInformation);
-    }
-
-    startGame();
 }
 
 /*******************************************
