@@ -1,10 +1,13 @@
 var isHost;
 var hostID;
-var lobbyListener = null;
+var removeLobbyListener = null;
+var removeGuessListener = null;
+var removeOnOpponentJoinListener = null;
+var removeRematchListener = null;
 
 /*******************************************
  * Functions that handle all lobby logic
- * Creating, joining, deleting, opponentLeaving
+ * Creating, joining, deleting, disconnecting, opponent leaving
  *******************************************/
 async function createLobby() {
     isHost = true;
@@ -54,9 +57,9 @@ async function createLobby() {
 
     // Set up listener that will redirect to the game-box when a guest joins
     // Knows that a guest joins because their name will get written to firebase
-    const playerInformationFilePath = "lobbies/" + hostID + "/playerInformation/guest/name";
-    const unsubscribe = addListenerFirebase(playerInformationFilePath, (data) => {
-        if (data != "null") {
+    const guestNameFilepath = "lobbies/" + hostID + "/playerInformation/guest/name";
+    const unsubscribe = addListenerFirebase(guestNameFilepath, (name) => {
+        if (name != "null" && name != undefined) {
             console.log("host");
             startGame();
             unsubscribe();
@@ -69,19 +72,22 @@ async function searchForLobby() {
     var haveFoundLobby = false;
     Object.entries(lobbyList).forEach(([lobbyHostID, lobbyInfo]) => {
         if (lobbyInfo.playerInformation.guest.name == "null") {
-            isHost = false;
             haveFoundLobby = true;
-            console.log("guest");
+            isHost = false;
             hostID = lobbyHostID;
             joinLobby(lobbyInfo);
         }
     });
     if (!haveFoundLobby) {
-        // TODO
-        // show no lobbies available
+        document.getElementById("no-lobbies").innerHTML = ("There are no lobbies available at the moment");
     }
     
     async function joinLobby(lobbyInfo) {
+        console.log("guest");
+
+        // Create a listner that checks for the lobby getting deleted, which happens when anyone quits or disconnects
+        setUpOnDisconnect();
+
         // Write the guestName to firebase
         const guestNameFilePath = `userPublicDetails/${await getUserIDFirebase()}/name`;
         const guestName = await readFirebase(guestNameFilePath);
@@ -97,11 +103,11 @@ function setUpOnDisconnect() {
     const lobbyFilepath = "lobbies/" + hostID;
 
     // Make on disconnect that, when the player disconnects, it deletes the lobby
-    if (lobbyListener != null) lobbyListener.unsubscribe();
+    if (removeLobbyListener != null) removeLobbyListener();
     deleteOnDisconnectFirebase(lobbyFilepath);
 
     // Make a listener that checks for the lobby being deleted and switches to the opponent left screen
-    lobbyListener = addListenerFirebase(lobbyFilepath, (value) => {
+    removeLobbyListener = addListenerFirebase(lobbyFilepath, (value) => {
         if (value == null) {
             hostID = null;
             isHost = null;
@@ -110,16 +116,13 @@ function setUpOnDisconnect() {
     });
 }
 function leaveLobby() {
+    removeLobbyListener();
     
-}
-async function deleteLobby() {
-    if (hostID == null) {
-        console.log("hostID is null, so cannot delete lobby");
-        return;
-    }
-    
+    changeToGTNBox("landing-page-box");
+
+    // Delete the lobby
     const lobbyFilePath = "lobbies/" + hostID;
-    await writeFirebase(lobbyFilePath, null);
+    writeFirebase(lobbyFilePath, null);
 }
 
 /*******************************************
@@ -165,16 +168,16 @@ async function startGame() {
 
     // Make a listener that, when whoseTurn changes, that checks for winning and swaps the gamebox
     const lobbyFilePath = "lobbies/" + hostID;
-    const unsubscribe = addListenerFirebase(whoseTurnFilepath, async (uselessInfo) => {
+    const unsubscribe = addListenerFirebase(whoseTurnFilepath, async () => {
         const lobby = await readFirebase(lobbyFilePath);
-        if (lobby.playerInformation.guest.latestGuess != "null" || lobby.playerInformation.host.latestGuess != "null") {
-            if (lobby.playerInformation.guest.latestGuess == lobby.gameInformation.number) {
-                endGame("guest", lobby.gameInformation.number, unsubscribe);
-            } else if (lobby.playerInformation.host.latestGuess == lobby.gameInformation.number) {
-                endGame("host", lobby.gameInformation.number, unsubscribe);
-            } else {
-                displayGameBox(lobby.playerInformation);
-            }
+        if (lobby == undefined) return;
+
+        if (lobby.playerInformation.guest.latestGuess == lobby.gameInformation.number) {
+            endGame("guest", lobby.gameInformation.number, unsubscribe);
+        } else if (lobby.playerInformation.host.latestGuess == lobby.gameInformation.number) {
+            endGame("host", lobby.gameInformation.number, unsubscribe);
+        } else {
+            displayGameBox(lobby.playerInformation);
         }
     });
 }

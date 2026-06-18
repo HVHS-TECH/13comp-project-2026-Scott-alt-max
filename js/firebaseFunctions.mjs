@@ -161,7 +161,7 @@ function addListenerFirebase(FILEPATH, FUNCTION) {
 function deleteOnDisconnectFirebase(FILEPATH) {
     const REF = ref(database, FILEPATH);
 
-    onDisconnect(ref).remove();
+    onDisconnect(REF).remove();
 }
 
 // Functions to write to the database

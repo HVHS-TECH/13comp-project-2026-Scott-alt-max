@@ -29,6 +29,7 @@
         </nav>
         <main>
             <div class="gtn-box default-box" id="landing-page-box">
+                <p id="no-lobbies"></p>
                 <button onclick="createLobby()">
                     create lobby
                 </button>
@@ -38,30 +39,33 @@
             </div>
             <div class="gtn-box" id="waiting-for-guest-box">
                 <h2>Go get a friend</h2>
-                <button onclick="deleteLobby()">Cancel matchmaking</button>
+                <button onclick="leaveLobby()">Cancel matchmaking</button>
             </div>
             <div class="gtn-box game-box" id="your-turn-box">
                 <p id="opponent-guess"></p>
                 <input class="guess-button" type="number" min="0" max="100" id="guess-input">
                 <button onclick="guess()">Guess</button>
+                <button onclick="leaveLobby()">Quit</button>
             </div>
             <div class="gtn-box game-box" id="not-your-turn-box">
                 <h1 id="how-far-off"></h1>
                 <p>Waiting for your opponent to guess . . .</p>
+                <button onclick="leaveLobby()">Quit</button>
             </div>
             <div class="gtn-box" id="game-over-box">
                 <h2 id="winner">Error: Should get updated</h2>
                 <h4>The number was: <span id="winning-number">Error: Should get updated</span></h4>
                 <p id="rematch">Would you like to play again?</p>
-                <button onclick="requestRematch()">Rematch</button><button onclick=`alert("not implemented yet :/")`>Leave</button>
+                <button onclick="requestRematch()">Rematch</button>
+                <button onclick="leaveLobby()">Quit</button>
             </div>
             <div class="gtn-box" id="waiting-for-rematch-box">
                 <h2>Waiting for your friend to accept rematch</h2>
-                <button>Cancel rematch</button>
+                <button onclick="leaveLobby()">Cancel rematch</button>
             </div>
             <div class="gtn-box" id="opponent-left-box">
                 <h2>Your friend left you :/</h2>
-                <button onclick="changeToGtnBox('landing-page-box')">Leave</button>
+                <button onclick="leaveLobby()">Leave</button>
             </div>
         </main>
     </body>
