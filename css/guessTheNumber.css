@@ -35,25 +35,17 @@ main {
 .default-box {
     display: flex;
 }
-.box-body {
+.gtn-box h2 {
     text-align: center;
-    padding: 0px;
-}
-.box-body h2 {
     margin: 0;
     padding: 16px;
-
-    font-size: 64px;
-}
-.box-info {
-    width: 0;
-    min-width: 100%;
-
-    display: block;
     font-size: 32px;
-    overflow-wrap: break-word;
 }
-.box-info p {
-    padding: 16px;
-    padding-top: 0px;
+.vs-container {
+    width: 100%;
+    display: flex;
+    text-align: center;
+}
+.vs-container div {
+    flex: 1 1 0;
 }
