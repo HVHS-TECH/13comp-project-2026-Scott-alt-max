@@ -3,22 +3,20 @@
  * If they are, take them to the already a user box,
  * if they aren't take them to the sign up page
  */
-async function runGoogleAuth() {
-	console.log("runGoogleAuth");
 
-	var googleAuth = await authFirebase();
-	return googleAuth.user.uid;
-}
 async function signUp() {
 	console.log("sign up");
 
 	// If the user isn't already signed in, run googleAuth
 	var userID = getUserIDFirebase();
-	if (userID == undefined) {
-		console.log("User needs to sign in");
-		userID = await runGoogleAuth();
+	if (userID == undefined || userID == null) {
+		googleAuth = await authFirebase();
+		userID = googleAuth.user.uid;
+		
+		sessionStorage.setItem("photoURL", googleAuth.user.photoURL);
 	}
 
+	// Redirect to the appropriate box
 	var isUser = await checkIsUser(userID);
 	if (isUser) {
 		changeToRegBox("already-a-user-box");
@@ -29,7 +27,10 @@ async function signUp() {
 async function login() {
 	console.log("login");
 	
-	var userID = await runGoogleAuth();
+	const googleAuth = await authFirebase();
+	const userID = googleAuth.user.uid;
+
+	sessionStorage.setItem("photoURL", googleAuth.user.photoURL);
 
 	var isUser = await checkIsUser(userID);
 	if (isUser) {
