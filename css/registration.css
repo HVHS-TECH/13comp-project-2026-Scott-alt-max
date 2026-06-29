@@ -34,25 +34,32 @@ p {
 }
 .box-body {
     text-align: center;
-    padding: 0px;
+    padding: 24px;
+    padding-top: 16px;
 }
 .box-body h2 {
     margin: 0;
-    padding: 16px;
+    margin-bottom: 16px;
 
-    font-size: 64px;
+    font-size: 48px;
 }
 .box-info {
     width: 0;
     min-width: 100%;
 
+
     display: block;
-    font-size: 32px;
     overflow-wrap: break-word;
 }
 .box-info p {
-    padding: 16px;
-    padding-top: 0px;
+    font-size: 24px;
+}
+.box-info .hyperlink {
+    color: blue;
+    text-decoration: underline;
+}.box-info .hyperlink:hover {
+    cursor: pointer;
+    color: rgb(67, 123, 225);
 }
 
 /* The css for the bottom of the reg-boxes, the buttons */
