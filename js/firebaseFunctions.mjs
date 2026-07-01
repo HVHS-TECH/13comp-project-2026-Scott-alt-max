@@ -4,7 +4,6 @@ import { getDatabase, ref, set, get, update, query, orderByChild, limitToFirst, 
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 var database;
-var userID;
 
 // Functions to initialise and authenticate
 function initialiseFirebase() {
@@ -38,8 +37,6 @@ function authFirebase() {
         console.log("Authentication successful"); //DIAG
         console.log("User Email: " + googleAuth._tokenResponse.email); //DIAG
         console.log("User Local ID: " + googleAuth.user.uid); //DIAG
-
-        userID = googleAuth.user.uid;
 
         return googleAuth;
     }).catch((error) => {

@@ -181,9 +181,9 @@ async function startGame() {
         if (lobby == undefined) return;
 
         if (lobby.playerInformation.guest.latestGuess == lobby.gameInformation.number) {
-            endGame("guest", lobby.gameInformation.number, unsubscribe);
+            endGame("guest", lobby.gameInformation.number, removeGuessListener);
         } else if (lobby.playerInformation.host.latestGuess == lobby.gameInformation.number) {
-            endGame("host", lobby.gameInformation.number, unsubscribe);
+            endGame("host", lobby.gameInformation.number, removeGuessListener);
         } else {
             displayGameBox(lobby.playerInformation);
         }
